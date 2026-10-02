@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cukupin</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_skip">Lewati</string>
+    <string name="onboarding_next">Lanjut</string>
+    <string name="onboarding_start">Buat Target</string>
+
+    <!-- Target -->
+    <string name="create_target_title">Buat Target Dana</string>
+    <string name="target_name_label">Nama target</string>
+    <string name="target_name_hint">cth. Uang saku Oktober</string>
+    <string name="target_amount_label">Dana awal (Rp)</string>
+    <string name="target_start_label">Tanggal mulai</string>
+    <string name="target_end_label">Tanggal selesai</string>
+    <string name="target_summary_title">Ringkasan</string>
+    <string name="target_duration">Durasi</string>
+    <string name="target_initial_daily">Batas awal rata-rata</string>
+    <string name="target_save">Simpan Target</string>
+    <string name="target_complete">Selesaikan Target</string>
+    <string name="target_repeat">Buat Target Baru</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_balance">Saldo tersisa</string>
+    <string name="dashboard_days_left">Hari tersisa</string>
+    <string name="dashboard_safe_limit">Batas aman</string>
+    <string name="dashboard_today_expense">Pengeluaran hari ini</string>
+    <string name="dashboard_recent">Transaksi terbaru</string>
+    <string name="dashboard_history">Riwayat</string>
+    <string name="dashboard_statistics">Statistik</string>
+    <string name="dashboard_vs_plan">Posisi terhadap rencana</string>
+
+    <!-- Expense -->
+    <string name="expense_add_title">Catat Pengeluaran</string>
+    <string name="expense_edit_title">Ubah Pengeluaran</string>
+    <string name="expense_amount_label">Nominal (Rp)</string>
+    <string name="expense_category_label">Kategori</string>
+    <string name="expense_date_label">Tanggal</string>
+    <string name="expense_note_label">Catatan (opsional)</string>
+    <string name="expense_save">Simpan Pengeluaran</string>
+    <string name="expense_save_changes">Simpan Perubahan</string>
+    <string name="expense_deleted">Transaksi dihapus</string>
+    <string name="expense_undo">Urungkan</string>
+    <string name="expense_delete_title">Hapus transaksi?</string>
+    <string name="expense_delete_cancel">Batal</string>
+    <string name="expense_delete_confirm">Hapus</string>
+
+    <!-- History -->
+    <string name="history_title">Riwayat Pengeluaran</string>
+
+    <!-- Statistics -->
+    <string name="statistics_title">Statistik</string>
+
+    <!-- Summary -->
+    <string name="summary_title">Ringkasan Target</string>
+
+    <!-- Validation -->
+    <string name="error_name_empty">Nama target tidak boleh kosong</string>
+    <string name="error_amount_invalid">Dana awal harus lebih besar dari nol</string>
+    <string name="error_date_invalid">Tanggal selesai tidak boleh sebelum tanggal mulai</string>
+</resources>
