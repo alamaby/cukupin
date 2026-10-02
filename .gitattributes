@@ -1,0 +1,16 @@
+# Normalisasi akhir baris agar konsisten di Windows, macOS, dan CI Linux.
+# Skrip wrapper wajib LF; batch script Windows sebaiknya CRLF.
+* text=auto
+
+gradlew text eol=lf
+gradlew.bat text eol=crlf
+*.sh text eol=lf
+*.bat text eol=crlf
+
+*.jar binary
+*.apk binary
+*.aab binary
+*.png binary
+*.jpg binary
+*.jks binary
+*.keystore binary

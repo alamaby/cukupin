@@ -1,0 +1,60 @@
+# Gradle
+.gradle/
+build/
+
+# Catatan penting: gradle/wrapper/gradle-wrapper.jar DAN gradle-wrapper.properties
+# SENGAJA di-commit. Wrapper butuh keduanya: `.jar` untuk menjalankan Gradle,
+# `.properties` untuk memberi tahu Gradle versi apa yang harus diunduh. Mengabaikan
+# keduanya membuat `./gradlew` mati bagi siapa pun yang clone repo ini.
+
+# Android / Kotlin
+local.properties
+.kotlin/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Hasil build yang bisa dipasang (jangan di-commit, ukurannya besar)
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Log & berkas sementara
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+*~
+nohup.out
+
+# Crash dump JVM (bisa berukuran ratusan MB)
+hs_err_pid*.log
+replay_pid*.log
+*.hprof
+
+# Environment variable & kredensial
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+*.iml
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Perkakas agen lokal
+.freebuff/
+
+# Keystore / signing (jangan pernah di-commit)
+*.jks
+*.keystore
+keystore.properties
