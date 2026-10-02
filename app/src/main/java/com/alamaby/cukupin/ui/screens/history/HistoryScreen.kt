@@ -111,7 +111,7 @@ fun HistoryScreen(
                         .fillMaxSize()
                         .padding(padding)
                         .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedAt(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     item { Spacer(Modifier.height(4.dp)) }
                     state.groups.forEach { group ->

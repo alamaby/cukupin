@@ -1,0 +1,20 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Lingkaran -->
+    <path
+        android:pathData="M54,26 a28,28 0 1,0 0,56 a28,28 0 1,0 0,-56 z"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="7" />
+
+    <!-- Centang: "cukup" -->
+    <path
+        android:pathData="M42,55 L51,64 L68,45"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

@@ -29,16 +29,6 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      # The repo does not contain gradle/wrapper/gradle-wrapper.jar (binary),
-      # so bootstrap a Gradle 8.7 distribution and regenerate the wrapper
-      # before using ./gradlew for the actual build steps.
-      - name: Bootstrap Gradle 8.7 and regenerate wrapper
-        run: |
-          curl -sSL https://services.gradle.org/distributions/gradle-8.7-bin.zip -o /tmp/gradle.zip
-          unzip -q /tmp/gradle.zip -d /tmp
-          /tmp/gradle-8.7/bin/gradle wrapper --gradle-version 8.7 --distribution-type bin --no-daemon
-          chmod +x gradlew
-
       - name: Cache Gradle
         uses: actions/cache@v4
         with:
@@ -72,9 +62,11 @@ jobs:
           name: lint-report
           path: app/build/reports/lint-results-debug.html
 
+      # ABI split aktif (arm64-v8a + universal), jadi nama APK debug bukan lagi
+      # app-debug.apk — unggah seluruh APK debug yang dihasilkan.
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: app-debug-apks
+          path: app/build/outputs/apk/debug/*.apk
 
