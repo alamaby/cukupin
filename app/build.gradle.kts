@@ -30,6 +30,19 @@ android {
         }
     }
 
+    // Menghasilkan APK per-ABI. Satu-satunya library native saat ini berasal dari
+    // DataStore (libdatastore_shared_counter.so), jadi APK arm64-v8a tidak lagi
+    // membawa salinan armeabi-v7a/x86/x86_64. APK universal tetap dibuat supaya
+    // emulator (x86_64) dan perangkat 32-bit tetap bisa memasang.
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a")
+            isUniversalApk = true
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

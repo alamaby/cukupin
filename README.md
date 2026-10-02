@@ -17,14 +17,63 @@ catat pengeluaran, lalu pantau apakah sisa uang cukup sampai tanggal yang ditent
    untuk mengunduh Gradle 8.7; `gradle-wrapper.jar` sudah disertakan).
 3. Pilih konfigurasi **app**, lalu **Run ▶** pada emulator/perangkat (API 26+).
 
-Alternatif via terminal (butuh Android SDK + `local.properties` berisi `sdk.dir`):
+Alternatif via terminal (butuh Android SDK; `ANDROID_HOME` **atau** `local.properties` berisi `sdk.dir`):
+
+> **Butuh JDK 17+.** AGP 8.5 tidak bisa jalan di Java 8, jadi arahkan `JAVA_HOME` ke JDK 17+
+> (paling mudah: JBR bawaan Android Studio) sebelum memanggil `./gradlew`:
+>
+> ```bash
+> # Git Bash
+> export JAVA_HOME="/c/Program Files/Android/Android Studio/jbr"
+> ```
+>
+> ```bat
+> :: cmd.exe / PowerShell
+> set "JAVA_HOME=C:\Program Files\Android\Android Studio\jbr"
+> ```
+>
 
 ```bash
 ./gradlew assembleDebug
 ./gradlew testDebugUnitTest   # unit test BudgetCalculator
 ```
 
-APK debug dihasilkan di `app/build/outputs/apk/debug/app-debug.apk`.
+APK debug dihasilkan di `app/build/outputs/apk/debug/`:
+
+| Berkas | Keterangan |
+| --- | --- |
+| `app-arm64-v8a-debug.apk` | khusus perangkat arm64 (mayoritas HP Android) |
+| `app-universal-debug.apk` | semua arsitektur (armeabi-v7a, x86/x86_64 untuk emulator) |
+
+Untuk membangun **hanya** arm64-v8a (lebih cepat, cocok untuk HP arm64):
+
+```bash
+./gradlew assembleDebug -Pandroid.injected.build.abi=arm64-v8a
+```
+
+Properti `android.injected.build.abi` adalah mode build ala Android Studio: hasilnya ditulis ke
+`app/build/intermediates/apk/debug/app-arm64-v8a-debug.apk` (AGP menunjuk lokasinya lewat
+`app/build/intermediates/apk_ide_redirect_file/debug/createDebugApkListingFileRedirect/redirect.txt`),
+**bukan** ke `app/build/outputs/apk/debug/`.
+
+`./gradlew` sudah siap pakai: `gradle/wrapper/gradle-wrapper.jar` disertakan di repo, jadi tidak
+perlu memasang Gradle manual. `.gitignore` menjaga `build/`, `.gradle/`, `local.properties`,
+`*.apk`/`*.aab`, dan keystore agar tidak ikut ter-commit.
+
+Memasang ke perangkat/emulator yang terhubung:
+
+```bash
+./gradlew installDebug
+# atau langsung:
+adb install -r app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
+```
+
+> Satu-satunya library native di aplikasi ini berasal dari DataStore
+> (`libdatastore_shared_counter.so`), jadi APK `arm64-v8a` sekitar 47 KB lebih kecil
+> daripada versi universal karena tidak menyertakan salinan armeabi-v7a/x86/x86_64.
+> Keduanya bisa dipasang di HP arm64; versi universal tetap diperlukan untuk emulator
+> (x86_64) dan perangkat 32-bit. `assembleRelease` masih menghasilkan APK **tanpa
+> tanda tangan** karena `signingConfigs` belum dikonfigurasi.
 
 ## Struktur proyek
 
