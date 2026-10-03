@@ -64,9 +64,24 @@ Memasang ke perangkat/emulator yang terhubung:
 
 ```bash
 ./gradlew installDebug
-# atau langsung:
-adb install -r app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
 ```
+
+Alternatifnya, pakai skrip pembantu yang memasang APK debug ke satu-satunya
+perangkat yang terhubung, memaksa flag `-t`, dan menjalankan aplikasinya:
+
+```bash
+scripts/install-debug.sh              # pasang saja
+scripts/install-debug.sh --launch     # pasang lalu jalankan MainActivity
+scripts/install-debug.sh -s emulator-5554 --apk path/ke/apk.apk
+```
+
+> **Kenapa flag `-t` wajib?** APK variant `debug` di project ini selalu membawa
+> `android:testOnly="true"` pada manifest hasil merge — flag itu di-inject Android
+> Gradle Plugin karena `testInstrumentationRunner` aktif di `app/build.gradle.kts`.
+> Karena itu `adb install -r` biasa gagal dengan
+> `INSTALL_FAILED_TEST_ONLY: Failed to install test-only apk`. Skrip mengirim
+> `-t` (izin pasang APK bertanda test) secara otomatis. `./gradlew installDebug`
+> tidak pernah bermasalah soal ini karena Gradle sudah menambahkan flag tersebut.
 
 > Satu-satunya library native di aplikasi ini berasal dari DataStore
 > (`libdatastore_shared_counter.so`), jadi APK `arm64-v8a` sekitar 47 KB lebih kecil
