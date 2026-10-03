@@ -2,7 +2,7 @@
 
 _Indeks + current state. Bukan duplikasi activity log; detail tiap task ada di entry-nya._
 Format version: 1 (`.memory/YYYY-MM-DD/HHmmss-kebab-case-topic.md`)
-Last updated: 2026-10-03 06:22 (+0700)
+Last updated: 2026-10-03 07:50 (+0700)
 
 ## Current State
 
@@ -10,6 +10,9 @@ Last updated: 2026-10-03 06:22 (+0700)
   AGP 8.5.2, Kotlin 1.9.24, Room via KSP, MVVM + DI manual, offline-first, UI berbahasa Indonesia.
 - Build `assembleDebug`, `testDebugUnitTest`, dan `lintDebug` **lolos** memakai `./gradlew`
   (Gradle 8.7 dari wrapper, JVM 21.0.9 JBR).
+- **CI hijau untuk pertama kalinya** (run `37083086501`, 3 Okt 2026): test, lint, dan assemble
+  semuanya lulus di GitHub Actions. APK yang di-build CI ukurannya identik dengan build lokal
+  (16.056.794 B dan 16.105.321 B), jadi build reproducible lintas Windows dan Linux.
 - ABI split aktif: `arm64-v8a` + universal. Debug arm64 = 16.056.794 B, universal = 16.105.321 B.
 - `./gradlew` berfungsi penuh; `gradle/wrapper/gradle-wrapper.jar` kini ikut di repo.
 - `.gitignore` + `.gitattributes` ada; `build/`, `.gradle/`, `local.properties`, `*.apk`,
@@ -34,11 +37,18 @@ Last updated: 2026-10-03 06:22 (+0700)
   Codex, dan OpenCode membacanya dari sana; `CLAUDE.md` hanya penunjuk untuk Claude Code.
 - **Tidak memakai DB MCP untuk Room.** Perubahan skema hanya lewat migration file non-destruktif
   (§4 AGENTS.md), tidak pernah ad-hoc ke perangkat.
+- **CI memasang Android SDK sendiri**, tanpa `android-actions/setup-android@v3`, karena action itu
+  meminta paket `tools` yang sudah dihapus dari repositori SDK Google. Paket yang dipakai:
+  `platform-tools`, `platforms;android-34`, `build-tools;34.0.0`.
 
 ## Open Items / Blockers
 
-- **Blok kanari masih ada di `AGENTS.md` §12** (`CANARY-UJI-INJEKSI-2026-10-03-A7F2`) — harus dihapus
-  setelah uji frekuensi injeksi selesai. Lihat entry 2026-10-03.
+- **`actions/checkout@v4`, `setup-java@v4`, dan `upload-artifact@v4`** masih menargetkan Node.js 20
+  sementara GitHub memaksa Node 24. Baru warning, tapi versi action perlu dinaikkan.
+- **`distributionSha256Sum`** belum ditambahkan ke `gradle-wrapper.properties`, jadi integritas
+  distribusi Gradle hanya dijamin HTTPS.
+- **Split ABI belum diverifikasi otomatis di CI** — masih bergantung pada pemeriksaan manual
+  isi `.so` di dalam APK.
 - **Tidak ada perangkat/emulator terhubung** (`adb devices` kosong) → `installDebug` dan
   `adb install -r` belum pernah diuji di perangkat nyata. APK sudah diverifikasi signature-nya
   (`CN=Android Debug`).
@@ -54,6 +64,7 @@ Last updated: 2026-10-03 06:22 (+0700)
 
 | Timestamp | Topik |
 | --- | --- |
+| [2026-10-03 07:47:33](2026-10-03/074733-ci-android-sdk-fix.md) | Perbaikan CI Android SDK setup, run pertama yang hijau |
 | [2026-10-03 06:18:46](2026-10-03/061846-agent-instructions.md) | `AGENTS.md`/`CLAUDE.md` + uji injeksi aturan |
 | [2026-10-02 14:38:00](2026-10-02/143800-gradle-wrapper-repair.md) | Perbaikan Gradle wrapper, `.gitignore`, `.gitattributes`, CI |
 | [2026-10-02 14:04:00](2026-10-02/140400-abi-split-arm64.md) | ABI split arm64-v8a + perbaikan blocker build |
