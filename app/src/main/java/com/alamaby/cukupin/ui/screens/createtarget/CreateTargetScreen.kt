@@ -12,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -42,7 +43,9 @@ import java.time.LocalDate
 @Composable
 fun CreateTargetScreen(
     viewModel: CreateTargetViewModel,
-    onTargetCreated: () -> Unit
+    onTargetCreated: () -> Unit,
+    onCancel: () -> Unit,
+    showBackButton: Boolean
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -51,7 +54,22 @@ fun CreateTargetScreen(
     }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Buat Target Dana") }) }
+        topBar = {
+            TopAppBar(
+                title = { Text("Buat Target Dana") },
+                navigationIcon = {
+                    // Tombol batal hanya bermakna kalau layar ini punya tujuan untuk
+                    // kembali. Saat Create Target menjadi layar awal (belum ada target
+                    // aktif), tidak ada halaman sebelumnya di back stack, sehingga
+                    // tombol back akan menggantung tanpa tujuan yang jelas.
+                    if (showBackButton) {
+                        IconButton(onClick = onCancel) {
+                            Icon(Icons.Filled.ArrowBack, contentDescription = "Batal")
+                        }
+                    }
+                }
+            )
+        }
     ) { padding ->
         Column(
             modifier = Modifier

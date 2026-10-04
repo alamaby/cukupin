@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.alamaby.cukupin.di.AppContainer
 import com.alamaby.cukupin.di.viewModelFactory
+import com.alamaby.cukupin.ui.screens.about.AboutScreen
 import com.alamaby.cukupin.ui.screens.addexpense.AddExpenseScreen
 import com.alamaby.cukupin.ui.screens.addexpense.AddExpenseViewModel
 import com.alamaby.cukupin.ui.screens.createtarget.CreateTargetScreen
@@ -23,6 +24,17 @@ import com.alamaby.cukupin.ui.screens.statistics.StatisticsScreen
 import com.alamaby.cukupin.ui.screens.statistics.StatisticsViewModel
 import com.alamaby.cukupin.ui.screens.summary.TargetSummaryScreen
 import com.alamaby.cukupin.ui.screens.summary.TargetSummaryViewModel
+
+/**
+ * Apakah tombol batal boleh ditampilkan di layar Buat Target.
+ *
+ * Layar ini punya dua pemasuk: sebagai startDestination saat belum ada target
+ * aktif, atau dibuka dari Dashboard lewat onCreateTarget. Hanya pemasuk kedua
+ * yang menyisakan halaman sebelumnya di back stack, jadi hanya pemasuk itu
+ * yang punya tujuan untuk tombol batal.
+ */
+fun hasPreviousDestination(hasPreviousBackStackEntry: Boolean): Boolean =
+    hasPreviousBackStackEntry
 
 @Composable
 fun CukupinApp(container: AppContainer, startDestination: String) {
@@ -52,13 +64,26 @@ fun CukupinApp(container: AppContainer, startDestination: String) {
                     CreateTargetViewModel(container.createBudgetTarget)
                 }
             )
+            // Hanya ada halaman sebelumnya kalau layar ini dibuka dari Dashboard.
+            // Saat Create Target menjadi startDestination, atau muncul setelah
+            // onboarding lewat popUpTo(inclusive), back stack hanya berisi form ini
+            // sendirian sehingga tombol back tidak punya tujuan.
+            val canGoBack = hasPreviousDestination(navController.previousBackStackEntry != null)
             CreateTargetScreen(
                 viewModel = vm,
                 onTargetCreated = {
                     navController.navigate(Routes.DASHBOARD) {
                         popUpTo(Routes.CREATE_TARGET) { inclusive = true }
                     }
-                }
+                },
+                onCancel = {
+                    if (!navController.popBackStack()) {
+                        navController.navigate(Routes.DASHBOARD) {
+                            popUpTo(Routes.DASHBOARD) { inclusive = true }
+                        }
+                    }
+                },
+                showBackButton = canGoBack
             )
         }
 
@@ -92,7 +117,8 @@ fun CukupinApp(container: AppContainer, startDestination: String) {
                 },
                 onOpenSummary = { targetId ->
                     navController.navigate(Routes.summary(targetId))
-                }
+                },
+                onOpenAbout = { navController.navigate(Routes.ABOUT) }
             )
         }
 
@@ -199,8 +225,13 @@ fun CukupinApp(container: AppContainer, startDestination: String) {
                     navController.navigate(Routes.DASHBOARD) {
                         popUpTo(Routes.DASHBOARD) { inclusive = true }
                     }
-                }
+                },
+                onBack = { navController.popBackStack() }
             )
+        }
+
+        composable(Routes.ABOUT) {
+            AboutScreen(onBack = { navController.popBackStack() })
         }
     }
 }

@@ -14,8 +14,8 @@ android {
         applicationId = "com.alamaby.cukupin"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -58,6 +58,9 @@ android {
 
     buildFeatures {
         compose = true
+        // Diperlukan agar BuildConfig.VERSION_NAME / VERSION_CODE bisa dibaca
+        // oleh layar "Tentang aplikasi" tanpa menulis nomor versi dua kali.
+        buildConfig = true
     }
 
     packaging {

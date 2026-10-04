@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -23,6 +24,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -54,7 +56,8 @@ fun DashboardScreen(
     onOpenStatistics: () -> Unit,
     onCreateTarget: () -> Unit,
     onTargetCompleted: (String) -> Unit,
-    onOpenSummary: (String) -> Unit
+    onOpenSummary: (String) -> Unit,
+    onOpenAbout: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
     val active = state.active
@@ -68,6 +71,14 @@ fun DashboardScreen(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
+                },
+                actions = {
+                    IconButton(onClick = onOpenAbout) {
+                        Icon(
+                            Icons.Filled.Info,
+                            contentDescription = "Tentang aplikasi"
+                        )
+                    }
                 }
             )
         },
