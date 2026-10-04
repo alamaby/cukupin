@@ -12,7 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -64,7 +64,7 @@ fun CreateTargetScreen(
                     // tombol back akan menggantung tanpa tujuan yang jelas.
                     if (showBackButton) {
                         IconButton(onClick = onCancel) {
-                            Icon(Icons.Filled.ArrowBack, contentDescription = "Batal")
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Batal")
                         }
                     }
                 }
