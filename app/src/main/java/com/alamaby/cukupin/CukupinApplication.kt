@@ -12,28 +12,29 @@ import com.alamaby.cukupin.di.AppContainer
 
 class CukupinApplication : Application() {
 
-    lateinit var container: AppContainer
-        private set
-
-    override fun onCreate() {
-        super.onCreate()
+    /**
+     * Container dibangun malas, bukan di [onCreate].
+     *
+     * `db.xDao()` memverifikasi kelas hasil generate Room saat dipanggil, dan
+     * setiap verifikasi bisa memakan ratusan milidetik di perangkat lambat atau
+     * emulator. Kalau itu terjadi di [onCreate], proses belum selesai startup
+     * ketika sistem sudah kehabisan waktu dan menandai proses ANR, lalu dibunuh
+     * sebelum layar pertama sempat tampil. Dengan `by lazy`, biaya itu baru
+     * dibayar saat pertama kali benar-benar dibutuhkan.
+     */
+    val container: AppContainer by lazy {
         val db = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java,
             "cukupin.db"
         ).build()
 
-        val targetRepo = BudgetTargetRepositoryImpl(db.budgetTargetDao())
-        val expenseRepo = ExpenseRepositoryImpl(db.expenseDao())
-        val categoryRepo = CategoryRepositoryImpl(db.categoryDao())
-        val adjustmentRepo = FundAdjustmentRepositoryImpl(db.fundAdjustmentDao())
-
-        container = AppContainer(
+        AppContainer(
             context = applicationContext,
-            targetRepository = targetRepo,
-            expenseRepository = expenseRepo,
-            categoryRepository = categoryRepo,
-            adjustmentRepository = adjustmentRepo,
+            targetRepository = BudgetTargetRepositoryImpl(db.budgetTargetDao()),
+            expenseRepository = ExpenseRepositoryImpl(db.expenseDao()),
+            categoryRepository = CategoryRepositoryImpl(db.categoryDao()),
+            adjustmentRepository = FundAdjustmentRepositoryImpl(db.fundAdjustmentDao()),
             onboardingPreferences = OnboardingPreferences(applicationContext)
         )
     }
