@@ -14,8 +14,8 @@ android {
         applicationId = "com.alamaby.cukupin"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -106,4 +106,16 @@ dependencies {
     // Testing
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+
+    // Instrumentation test. NavHost sungguhan hanya bisa dirender di device,
+    // jadi test navigasi memakai TestNavHostController + compose test rule.
+    // ui-test-manifest hanya untuk debug karena artifact itu mendaftarkan
+    // ComponentActivity yang dipakai createComposeRule().
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.navigation.testing)
+    debugImplementation(libs.compose.ui.test.manifest)
 }

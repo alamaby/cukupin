@@ -25,17 +25,6 @@ import com.alamaby.cukupin.ui.screens.statistics.StatisticsViewModel
 import com.alamaby.cukupin.ui.screens.summary.TargetSummaryScreen
 import com.alamaby.cukupin.ui.screens.summary.TargetSummaryViewModel
 
-/**
- * Apakah tombol batal boleh ditampilkan di layar Buat Target.
- *
- * Layar ini punya dua pemasuk: sebagai startDestination saat belum ada target
- * aktif, atau dibuka dari Dashboard lewat onCreateTarget. Hanya pemasuk kedua
- * yang menyisakan halaman sebelumnya di back stack, jadi hanya pemasuk itu
- * yang punya tujuan untuk tombol batal.
- */
-fun hasPreviousDestination(hasPreviousBackStackEntry: Boolean): Boolean =
-    hasPreviousBackStackEntry
-
 @Composable
 fun CukupinApp(container: AppContainer, startDestination: String) {
     val navController = rememberNavController()
@@ -68,12 +57,16 @@ fun CukupinApp(container: AppContainer, startDestination: String) {
             // Saat Create Target menjadi startDestination, atau muncul setelah
             // onboarding lewat popUpTo(inclusive), back stack hanya berisi form ini
             // sendirian sehingga tombol back tidak punya tujuan.
-            val canGoBack = hasPreviousDestination(navController.previousBackStackEntry != null)
+            val canGoBack = navController.previousBackStackEntry != null
             CreateTargetScreen(
                 viewModel = vm,
                 onTargetCreated = {
+                    // Dashboard yang lama sudah ada di back stack saat form ini
+                    // dibuka dari sana, jadi dia diganti, bukan ditumpuk. Kalau
+                    // navigate() biasa, akan ada dua entri Dashboard dan tombol
+                    // back akan memunculkan Dashboard lama dengan ViewModel basi.
                     navController.navigate(Routes.DASHBOARD) {
-                        popUpTo(Routes.CREATE_TARGET) { inclusive = true }
+                        popUpTo(Routes.DASHBOARD) { inclusive = true }
                     }
                 },
                 onCancel = {
@@ -106,9 +99,11 @@ fun CukupinApp(container: AppContainer, startDestination: String) {
                 onOpenHistory = { navController.navigate(Routes.HISTORY) },
                 onOpenStatistics = { navController.navigate(Routes.STATISTICS) },
                 onCreateTarget = {
-                    navController.navigate(Routes.CREATE_TARGET) {
-                        popUpTo(Routes.DASHBOARD) { inclusive = true }
-                    }
+                    // Dashboard sengaja TIDAK di-pop. Kalau dihapus, form ini
+                    // menjadi satu-satunya entri back stack: tombol batal tidak
+                    // punya tujuan, dan tombol back sistem akan langsung
+                    // menutup aplikasi.
+                    navController.navigate(Routes.CREATE_TARGET)
                 },
                 onTargetCompleted = { targetId ->
                     navController.navigate(Routes.summary(targetId)) {
