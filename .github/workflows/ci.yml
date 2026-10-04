@@ -74,6 +74,13 @@ jobs:
       - name: Assemble debug APK
         run: ./gradlew assembleDebug --stacktrace --no-daemon
 
+      # Instrumentation test butuh emulator, dan image emulator menambah
+      # beberapa menit per run. Yang bisa dicek di sini hanya kompilasi:
+      # tanpa langkah ini, instrumentation test yang rusak diam-diam tidak akan
+      # pernah ketahuan sampai seseorang menjalankan emulator secara lokal.
+      - name: Compile instrumentation tests
+        run: ./gradlew assembleDebugAndroidTest --stacktrace --no-daemon
+
       - name: Upload unit test report
         if: always()
         uses: actions/upload-artifact@v4

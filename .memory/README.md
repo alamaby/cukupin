@@ -2,7 +2,7 @@
 
 _Indeks + current state. Bukan duplikasi activity log; detail tiap task ada di entry-nya._
 Format version: 1 (`.memory/YYYY-MM-DD/HHmmss-kebab-case-topic.md`)
-Last updated: 2026-10-03 07:50 (+0700)
+Last updated: 2026-10-04 10:15 (+0700)
 
 ## Current State
 
@@ -20,7 +20,10 @@ Last updated: 2026-10-03 07:50 (+0700)
 - Instruksi agent level repo aktif: `AGENTS.md` (+ penunjuk `CLAUDE.md`), disalin dari
   `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.config/opencode/AGENTS.md` dan diadaptasi ke
   stack Android/Kotlin.
-- `plans/` belum pernah dipakai; `.memory/` baru diinisialisasi 3 Okt 2026.
+- `plans/` dipakai sejak 4 Okt 2026 (rencana closing gap navigasi); `.memory/` diinisialisasi
+  3 Okt 2026.
+- **Ada instrumentation test** di `app/src/androidTest/` (5 tes navigasi) yang lulus di
+  emulator API 36. CI baru mengompilasi androidTest, belum menjalankannya.
 
 ## Active Decisions
 
@@ -59,11 +62,18 @@ Last updated: 2026-10-03 07:50 (+0700)
   `HistoryScreen.kt:67`, `StatisticsScreen.kt:61`; `TrendingUp`/`TrendingDown` di `HealthStatusUi.kt:59,83,99`
   (saran: `Icons.AutoMirrored.Filled.*`).
 - **Tidak ada test instrumentation** — `androidTest` baru punya `compose-bom`; belum ada UI test.
+  (Sudah usang 4 Okt 2026: ada 5 tes navigasi, lihat entry terbaru.)
+- **`TestNavHostController` tidak bisa dipakai** di navigation 2.7.7 bersama `composable()` —
+  `TestNavigatorProvider` mengembalikan `TestNavigator` sehingga `ClassCastException` pada
+  `ComposeNavigator`, dan kelasnya `final`. Test UI harus lewat NavController Compose biasa.
+- **Container dibangun `by lazy`.** Membangun Room di `Application.onCreate()` memicu ANR
+  cold start di perangkat lambat karena verifikasi kelas DAO.
 
 ## Recent Entries
 
 | Timestamp | Topik |
 | --- | --- |
+| [2026-10-04 10:15:00](2026-10-04/101500-navigation-coverage-and-cold-start-fix.md) | Fix back stack Create Target, ANR cold start, test navigasi pertama |
 | [2026-10-03 07:47:33](2026-10-03/074733-ci-android-sdk-fix.md) | Perbaikan CI Android SDK setup, run pertama yang hijau |
 | [2026-10-03 06:18:46](2026-10-03/061846-agent-instructions.md) | `AGENTS.md`/`CLAUDE.md` + uji injeksi aturan |
 | [2026-10-02 14:38:00](2026-10-02/143800-gradle-wrapper-repair.md) | Perbaikan Gradle wrapper, `.gitignore`, `.gitattributes`, CI |
